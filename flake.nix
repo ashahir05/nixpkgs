@@ -15,7 +15,6 @@
       recurse = val: pkgs: if builtins.typeOf(val) == "set" then (nixpkgs.lib.mapAttrs (k: v: if v ? type && v.type == "derivation" then (wrapPackage v pkgs) else (recurse v pkgs)) val) else val;
       wrapPackage = pkg: pkgs: (
         if pkg ? overrideAttrs then pkg.overrideAttrs (old: {
-          name = "${pkg.name}-gled";
           nativeBuildInputs= [];
           buildCommand = ''
             set -euo pipefail
