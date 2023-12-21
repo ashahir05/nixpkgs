@@ -22,5 +22,5 @@ jobs:
         uses: pascalgn/automerge-action@v0.15.6
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          LOG: "TRACE"
+          BASE_BRANCHES: "update_flake_lock_action"
             
