@@ -16,9 +16,7 @@ jobs:
         uses: DeterminateSystems/update-flake-lock@main
         with:
           pr-title: "Update flake.lock" # Title of PR to be created
-          pr-labels: |                  # Labels to be set on the PR
-            dependencies
-            automated
+          pr-labels: |
             automerge
       - name: Merge pull requests (automerge-action)
         uses: pascalgn/automerge-action@v0.15.6
