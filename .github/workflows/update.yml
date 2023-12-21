@@ -2,7 +2,7 @@ name: update-flake-lock
 on:
   workflow_dispatch: # allows manual triggering
   schedule:
-    - cron: '0 0 * * *' # runs weekly on Sunday at 00:00
+    - cron: "0 0 * * *" # runs weekly on Sunday at 00:00
 
 jobs:
   lockfile:
@@ -18,9 +18,3 @@ jobs:
           pr-title: "Update flake.lock" # Title of PR to be created
           pr-labels: |
             automerge
-      - id: automerge
-        name: Merge
-        uses: pascalgn/automerge-action@v0.15.6
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-            
