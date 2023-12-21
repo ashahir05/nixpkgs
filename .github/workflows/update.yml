@@ -12,9 +12,16 @@ jobs:
         uses: actions/checkout@v3
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
-      - name: Update flake.lock
+      - id: lockup
+        name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@main
         with:
           pr-title: "Update flake.lock" # Title of PR to be created
           pr-labels: |
             automerge
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.15.6"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          PULL_REQUEST: "${{ steps.lockup.outputs.pull-request-number }}"
+        
