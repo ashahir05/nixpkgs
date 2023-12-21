@@ -2,7 +2,7 @@
   description = "Nix GL Fixes";
 
   inputs = {  
-    nixpkgs.url = "github:NixOS/nixpkgs/ef754f93dd25862be5a03fd9a3c0e651d64219cc";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
   outputs = { nixpkgs, ... }:
