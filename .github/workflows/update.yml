@@ -19,3 +19,7 @@ jobs:
           pr-labels: |                  # Labels to be set on the PR
             dependencies
             automated
+            automerge
+      - name: Merge pull requests (automerge-action)
+        uses: pascalgn/automerge-action@v0.15.6
+            
