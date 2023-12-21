@@ -18,8 +18,9 @@ jobs:
           pr-title: "Update flake.lock" # Title of PR to be created
           pr-labels: |
             automerge
-      - id: automerge
-        name: automerge
+      - name: automerge
         uses: "pascalgn/automerge-action@v0.15.6"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          LOG: "TRACE"
+        
