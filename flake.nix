@@ -15,7 +15,7 @@
       recurse = val: pkgs: if builtins.typeOf(val) == "set" then (nixpkgs.lib.mapAttrs (k: v: if v ? type && v.type == "derivation" then (wrapPackage v pkgs) else (recurse v pkgs)) val) else val;
       wrapPackage = pkg: pkgs: (
         if pkg ? type && pkg.type == "derivation" then pkgs.stdenv.mkDerivation ({
-          inherit (pkg) name pname outputs passthru;
+          inherit (pkg) name pname outputs passthru meta;
           nativeBuildInputs= [ pkg ];
           buildCommand = ''
             set -euo pipefail
