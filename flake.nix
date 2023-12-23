@@ -26,21 +26,21 @@
                     ''
                       set -x
                       cp -rs --no-preserve=mode "${pkg.${outputName}}" "''$${outputName}"
+                      mkdir -p $\${outputName}/bin/org
                       set +x
+                      for bin in ${pkg.${outputName}}/bin/org/*; do
+                        mv $bin $\${outputName}/bin/org
+                        echo "#!/bin/sh" > $bin
+                        echo "export LD_LIBRARY_PATH=${pkgs.mesa.drivers}/lib" >> $bin
+                        echo "export LIBGL_DRIVERS_PATH=${pkgs.mesa.drivers}/lib/dri" >> $bin
+                        echo "exec $\${outputName}/bin/org/$(basename $bin) \"\$@\"" >> $bin
+                        chmod +x $bin
+                      done
                     ''
                   )
                   (pkg.outputs or ["out"])
                 )
             }
-            for bin in $out/bin/*; do
-              mkdir -p $out/bin/org
-              mv $bin $out/bin/org
-              echo "#!/bin/sh" > $bin
-              echo "export LD_LIBRARY_PATH=${pkgs.mesa.drivers}/lib" >> $bin
-              echo "export LIBGL_DRIVERS_PATH=${pkgs.mesa.drivers}/lib/dri" >> $bin
-              echo "exec $out/bin/org/$(basename $bin) \"\$@\"" >> $bin
-              chmod +x $bin
-            done
           '';
         }) else pkg
       );
