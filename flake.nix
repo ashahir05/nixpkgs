@@ -21,12 +21,19 @@
           nativeBuildInputs= [ pkg pkgs.mesa.drivers ];
           installPhase = builtins.concatStringsSep ''''\n'' (builtins.map (output: let oldOut = pkg."${output}"; out = output; in ''
             mkdir -p ''$${out}/bin
-            for orgBin in ${oldOut}/bin/*; do
+            for node in ${oldOut}/*; do
+              if [ $(basename $node) != "nix-support" ]; then
+                cp -rs $node ''$${out}/
+              fi
+            done
+            mkdir -p ''$${out}/bin_org
+            for orgBin in ''$${out}/bin/*; do
               bin_name=$(basename $orgBin)
+              mv ''$${out}/bin/* ''$${out}/bin_org/
               echo "#!/bin/sh" > ''$${out}/bin/$bin_name
               echo "export LD_LIBRARY_PATH=${pkgs.mesa.drivers}/lib" >> ''$${out}/bin/$bin_name
               echo "export LIBGL_DRIVERS_PATH=${pkgs.mesa.drivers}/lib/dri" >> ''$${out}/bin/$bin_name
-              echo "exec ${oldOut}/bin/$bin_name "''$\@"" >> ''$${out}/bin/$bin_name
+              echo "exec ''$${out}/bin_org/$bin_name "''$\@"" >> ''$${out}/bin/$bin_name
               chmod +x ''$${out}/bin/$bin_name
             done
           '') outputs);
