@@ -29,7 +29,7 @@
             mkdir -p ''$${out}/bin_org
             for orgBin in ''$${out}/bin/*; do
               bin_name=$(basename $orgBin)
-              mv ''$${out}/bin/* ''$${out}/bin_org/
+              mv ''$${out}/bin/$bin_name ''$${out}/bin_org/$bin_name
               echo "#!/bin/sh" > ''$${out}/bin/$bin_name
               echo "export LD_LIBRARY_PATH=${pkgs.mesa.drivers}/lib" >> ''$${out}/bin/$bin_name
               echo "export LIBGL_DRIVERS_PATH=${pkgs.mesa.drivers}/lib/dri" >> ''$${out}/bin/$bin_name
