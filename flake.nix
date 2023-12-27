@@ -21,11 +21,10 @@
           nativeBuildInputs= [ pkg pkgs.mesa.drivers ];
           installPhase = builtins.concatStringsSep ''''\n'' (builtins.map (output: let oldOut = pkg."${output}"; out = output; in ''
             mkdir -p ''$${out}/bin
-            for node in ${oldOut}/*; do
-              if [ $(basename $node) != "nix-support" ]; then
-                cp -rs $node ''$${out}/
-              fi
-            done
+            cd ${oldOut}
+            find -L* -type d -exec mkdir -p ''$${out}/{} \;
+            find -L * -type f -exec ln -s ${oldOut}/{} ''$${out}/{} \;
+            ls -la ''$${out}/bin
             mkdir -p ''$${out}/bin_org
             for orgBin in ''$${out}/bin/*; do
               bin_name=$(basename $orgBin)
