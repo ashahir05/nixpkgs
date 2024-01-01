@@ -24,7 +24,6 @@
             cd ${oldOut}
             find -L * -type d -exec mkdir -p ''$${out}/{} \;
             find -L * -type f -exec ln -s ${oldOut}/{} ''$${out}/{} \;
-            ls -la ''$${out}/
             mkdir -p ''$${out}/bin_org
             for orgBin in ''$${out}/bin/*; do
               bin_name=$(basename $orgBin)
