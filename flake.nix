@@ -19,16 +19,16 @@
           src = pkg;
           buildInputs= [ pkg pkgs.mesa.drivers ];
           nativeBuildInputs= [ pkg pkgs.mesa.drivers ];
-          installPhase = builtins.concatStringsSep ''''\n'' (builtins.map (output: let oldOut = pkg."${output}"; out = output; in ''
+          fixupPhase = builtins.concatStringsSep ''''\n'' (builtins.map (output: let oldOut = pkg."${output}"; out = output; in ''
             mkdir -p ''$${out}/bin
             cd ${oldOut}
-            find -L* -type d -exec mkdir -p ''$${out}/{} \;
+            find -L * -type d -exec mkdir -p ''$${out}/{} \;
             find -L * -type f -exec ln -s ${oldOut}/{} ''$${out}/{} \;
-            ls -la ''$${out}/bin
+            ls -la ''$${out}/
             mkdir -p ''$${out}/bin_org
             for orgBin in ''$${out}/bin/*; do
               bin_name=$(basename $orgBin)
-              mv ''$${out}/bin/$bin_name ''$${out}/bin_org/$bin_name
+              mv $orgBin ''$${out}/bin_org/$bin_name
               echo "#!/bin/sh" > ''$${out}/bin/$bin_name
               echo "export LD_LIBRARY_PATH=${pkgs.mesa.drivers}/lib" >> ''$${out}/bin/$bin_name
               echo "export LIBGL_DRIVERS_PATH=${pkgs.mesa.drivers}/lib/dri" >> ''$${out}/bin/$bin_name
