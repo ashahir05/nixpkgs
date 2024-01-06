@@ -19,7 +19,7 @@
           src = pkg.src;
           builder = "${pkgs.bash}/bin/bash";
           args = [ "./wrap.sh" pkg pkgs.mesa.drivers ];
-          buildInput s= [ pkg pkgs.mesa.drivers ];
+          buildInputs= [ pkg pkgs.mesa.drivers ];
           nativeBuildInputs= [ pkg  pkgs.mesa.drivers ];
         }) else pkg
       );
