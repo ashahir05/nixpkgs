@@ -14,11 +14,15 @@
       ];
       recurse = val: pkgs: if builtins.typeOf(val) == "set" then (nixpkgs.lib.mapAttrs (k: v: if v ? type && v.type == "derivation" then (wrapPackage v pkgs) else (recurse v pkgs)) val) else val;
       wrapPackage = pkg: pkgs: (
-        if pkg ? type && pkg.type == "derivation" then pkgs.stdenv.mkDerivation (rec {
+        if pkg ? type && pkg.type == "derivation" then pkgs.stdenv.mkDerivation ({
           inherit (pkg) name outputs passthru meta;
           src = pkg.src;
           builder = "${pkgs.bash}/bin/bash";
-          args = [ "./wrap.sh" pkg pkgs.mesa.drivers ];
+          coreutils = pkgs.coreutils;
+          findutils = pkgs.findutils;
+          tree = pkgs.tree;
+          pkg = pkg;
+          args = [ ./wrap.sh pkgs.mesa.drivers pkg.outputs ];
           buildInputs= [ pkg pkgs.mesa.drivers ];
           nativeBuildInputs= [ pkg  pkgs.mesa.drivers ];
         }) else pkg

@@ -1,15 +1,21 @@
-mkdir -p $out/bin
-cd $1
-find -L * -type d -exec mkdir -p $out/{} \;
-find -L * -type f -exec ln -s $1/{} $out/{} \;
-mkdir -p $out/bin_org
-for orgBin in $out/bin/*; do
-  bin_name=$(basename $orgBin)
-  mv $orgBin $out/bin_org/$bin_name
-  echo "#!/bin/sh" > $out/bin/$bin_name
-  echo "export LD_LIBRARY_PATH=$2/lib" >> $out/bin/$bin_name
-  echo "export LIBGL_DRIVERS_PATH=$2/lib/dri" >> $out/bin/$bin_name
-  echo "exec $out/bin_org/$bin_name \"$@\"" >> $out/bin/$bin_name
-  chmod +x $out/bin/$bin_name
-done
+export PATH="$coreutils/bin:$findutils/bin"
 
+for output_name in $2; do
+  out=${!output_name}
+  mkdir -p $out/bin
+  cd $pkg
+  find -L * -type d -exec mkdir -p $out/{} \;
+  find -L * -type f -exec ln -s $pkg/{} $out/{} \;
+
+  mkdir -p $out/bin_org
+  for orgBin in $out/bin/*; do
+    [ -e "$orgBin" ] || continue
+    bin_name=$(basename $orgBin)
+    mv $orgBin $out/bin_org/$bin_name
+    echo "#!/bin/sh" > $out/bin/$bin_name
+    echo "export LD_LIBRARY_PATH=$1/lib" >> $out/bin/$bin_name
+    echo "export LIBGL_DRIVERS_PATH=$1/lib/dri" >> $out/bin/$bin_name
+    echo "exec $out/bin_org/$bin_name \"\$@\"" >> $out/bin/$bin_name
+    chmod +x $out/bin/$bin_name
+  done
+done
