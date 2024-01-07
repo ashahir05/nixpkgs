@@ -16,7 +16,7 @@
       wrapPackage = pkg: pkgs: (
         if pkg ? type && pkg.type == "derivation" then pkgs.stdenv.mkDerivation ({
           inherit (pkg) name outputs passthru meta;
-          src = pkg.src;
+          src = pkg;
           builder = "${pkgs.bash}/bin/bash";
           coreutils = pkgs.coreutils;
           findutils = pkgs.findutils;
