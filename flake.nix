@@ -14,16 +14,19 @@
       ];
       recurse = val: pkgs: if builtins.typeOf(val) == "set" then (nixpkgs.lib.mapAttrs (k: v: if v ? type && v.type == "derivation" then (wrapPackage v pkgs) else (recurse v pkgs)) val) else val;
       wrapPackage = pkg: pkgs: (
-        if pkg ? type && pkg.type == "derivation" then pkgs.stdenv.mkDerivation ({
-          inherit (pkg) name outputs passthru meta;
-          src = pkg;
-          builder = "${pkgs.bash}/bin/bash";
-          coreutils = pkgs.coreutils;
-          findutils = pkgs.findutils;
-          args = [ ./wrap.sh pkgs.mesa.drivers pkg.outputs ];
-          buildInputs= [ pkg pkgs.mesa.drivers ];
-          nativeBuildInputs= [ pkg  pkgs.mesa.drivers ];
-        } // ( builtins.listToAttrs (builtins.map (x: { name = "pkg_${x}"; value = pkg."${x}"; }) pkg.outputs ) )) else pkg
+        if pkg ? type && pkg.type == "derivation" then (
+          pkgs.stdenv.mkDerivation (( builtins.listToAttrs (builtins.map (x: { name = "pkg_${x}"; value = pkg."${x}"; }) pkg.outputs )) // {
+            inherit (pkg) name outputs meta passthru;
+            coreutils = pkgs.coreutils;
+            findutils = pkgs.findutils;
+            builder = "${pkgs.bash}/bin/bash";
+            args = [
+              ./wrap.sh
+              pkgs.mesa.drivers
+              pkg.outputs
+            ];
+          })
+        ) else pkg
       );
     in
     {
