@@ -20,12 +20,10 @@
           builder = "${pkgs.bash}/bin/bash";
           coreutils = pkgs.coreutils;
           findutils = pkgs.findutils;
-          tree = pkgs.tree;
-          pkg = pkg;
           args = [ ./wrap.sh pkgs.mesa.drivers pkg.outputs ];
           buildInputs= [ pkg pkgs.mesa.drivers ];
           nativeBuildInputs= [ pkg  pkgs.mesa.drivers ];
-        }) else pkg
+        } // ( builtins.listToAttrs (builtins.map (x: { name = "pkg_${x}"; value = pkg."${x}"; }) pkg.outputs ) )) else pkg
       );
     in
     {

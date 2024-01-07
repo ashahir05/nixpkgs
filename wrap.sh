@@ -2,7 +2,10 @@ export PATH="$coreutils/bin:$findutils/bin"
 
 for output_name in $2; do
   out=${!output_name}
+  pkg_output_name="pkg_${output_name}"
+  pkg=${!pkg_output_name}
   mkdir -p $out/bin
+
   cd $pkg
   find -L * -type d -exec mkdir -p $out/{} \;
   find -L * -type f -exec ln -s $pkg/{} $out/{} \;
