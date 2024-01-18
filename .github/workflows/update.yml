@@ -13,7 +13,7 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
       - name: Update flake.lock
-        run:
+        run: |
           git config --global user.name "Auto updater"
           git config --global user.email "autoupdater-github@ashahir05"
           nix flake update
