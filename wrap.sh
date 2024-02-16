@@ -18,6 +18,7 @@ for output_name in $2; do
     echo "#!/bin/sh" > $out/bin/$bin_name
     echo "export LD_LIBRARY_PATH=$1/lib" >> $out/bin/$bin_name
     echo "export LIBGL_DRIVERS_PATH=$1/lib/dri" >> $out/bin/$bin_name
+    echo "export VK_DRIVER_FILES=$1/share/vulkan/icd.d" >> $out/bin/$bin_name
     echo "exec $out/bin_org/$bin_name \"\$@\"" >> $out/bin/$bin_name
     chmod +x $out/bin/$bin_name
   done
