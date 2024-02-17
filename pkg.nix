@@ -2,8 +2,11 @@
   let 
     finalPkg = pkg.override (builtins.removeAttrs args [ "pkg" "pkgs" ]);
     build = orgPkg: ({
-      name = orgPkg.name;
+      name = if orgPkg ? name then orgPkg.name else null;
+      pname = if orgPkg ? pname then orgPkg.pname else null;
       outputs = orgPkg.outputs;
+      passthru = if orgPkg ? passthru then orgPkg.passthru else null;
+      meta = if orgPkg ? meta then orgPkg.meta else null;
       targetDrv = orgPkg;
       builder = "${pkgs.bash}/bin/bash";
       args = [
