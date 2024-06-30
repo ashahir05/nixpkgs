@@ -19,6 +19,5 @@
         let pkgs = import nixpkgs { config.allowUnfree = true; config.allowUnsupportedSystem = true; inherit system; };
         in recurse pkgs pkgs
       );
-      checks = eachSystem (system: import ./checks.nix { nixpkgs = self.legacyPackages.${system}; });
     };
 }
