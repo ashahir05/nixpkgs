@@ -1,6 +1,6 @@
 { nixpkgs, system }: (pkg: pkg.overrideAttrs (prev: {
   buildCommand = ''
-    set -euo pipefail
+    set -eo pipefail
     ${
       nixpkgs.lib.concatStringsSep "\n"
         (map
@@ -8,15 +8,16 @@
             ''
               echo "Building output ${outputName}"
               set -x
+              mkdir -p "''$${outputName}/bin"
               for file in ${pkg.${outputName}}/bin/* ; do
                 if [ -f "$file" ]; then
-                  cat <<-EOF > "''$${outputName}/bin/$(basename $file)"
-                  export LD_LIBRARY_PATH="${nixpkgs.legacyPackages.${system}.mesa.drivers}/lib:$LD_LIBRARY_PATH"
-                  export LIBGL_DRIVERS_PATH="${nixpkgs.legacyPackages.${system}.mesa.drivers}/lib/dri:$LIBGL_DRIVERS_PATH"
-                  export VK_DRIVER_FILES="${nixpkgs.legacyPackages.${system}.mesa.drivers}/share/vulkan/icd.d:$VK_DRIVER_FILES"
-                  exec $file "$@"
-                  EOF
-                fi 
+                  echo "#!${nixpkgs.bash}/bin/bash" > "''$${outputName}/bin/$(basename $file)"
+                  echo "export LD_LIBRARY_PATH="${nixpkgs.mesa.drivers}/lib:$LD_LIBRARY_PATH"" >> "''$${outputName}/bin/$(basename $file)"
+                  echo "export LIBGL_DRIVERS_PATH="${nixpkgs.mesa.drivers}/lib/dri:$LIBGL_DRIVERS_PATH"" >> "''$${outputName}/bin/$(basename $file)"
+                  echo "export VK_DRIVER_FILES="${nixpkgs.mesa.drivers}/share/vulkan/icd.d:$VK_DRIVER_FILES"" >> "''$${outputName}/bin/$(basename $file)"
+                  echo "exec $file "$@"" >> "''$${outputName}/bin/$(basename $file)"
+                  chmod +x "''$${outputName}/bin/$(basename $file)"
+                fi
               done
               set +x
             ''

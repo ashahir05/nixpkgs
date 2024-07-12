@@ -17,8 +17,9 @@
         let 
           patchedPkgs = import nixpkgs { config.allowUnfree = true; config.allowUnsupportedSystem = true; inherit system; };
           wrap = import ./wrap.nix { nixpkgs = patchedPkgs; system = system; };
+          recurse = lib.mapAttrs (key: val: if (val ? type && val.type == "derivation") then (wrap val) else (recurse val));
         in
-          lib.mapAttrsRecursiveCond (set: set ? "type" && set.type == "") (val: wrap val) patchedPkgs
+          recurse patchedPkgs
       );  
     };
 }
