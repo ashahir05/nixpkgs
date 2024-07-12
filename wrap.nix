@@ -22,7 +22,7 @@
               set +x
             ''
           )
-          (prev.outputs or ["out"])
+          (pkg.outputs)
         )
     }
   '';
