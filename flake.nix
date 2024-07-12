@@ -14,7 +14,11 @@
     {
       inherit (nixpkgs) lib nixosModules htmlDocs;
       legacyPackages = eachSystem (system:
-        import nixpkgs { config.allowUnfree = true; config.allowUnsupportedSystem = true; inherit system; }
-      );
+        let 
+          patchedPkgs = import nixpkgs { config.allowUnfree = true; config.allowUnsupportedSystem = true; inherit system; };
+          wrap = import ./wrap.nix { nixpkgs = patchedPkgs; system = system; };
+        in
+          lib.mapAttrsRecursiveCond (set: set ? "type" && set.type == "") (val: wrap val) patchedPkgs
+      );  
     };
 }
