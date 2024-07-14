@@ -21,6 +21,7 @@
                     echo "export VK_DRIVER_FILES="${nixpkgs.mesa.drivers}/share/vulkan/icd.d:$VK_DRIVER_FILES"" >> "''$${outputName}/bin/$(basename $file)"
                     echo "exec $file "\"\$@\""" >> "''$${outputName}/bin/$(basename $file)"
                     chmod +x "''$${outputName}/bin/$(basename $file)"
+                    cp -s $file "''$${outputName}/bin/$(basename $file).raw"
                   fi
                 done
                 set +x
