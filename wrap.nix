@@ -12,7 +12,11 @@
               ''
                 echo "Building output ${outputName}"
                 set -x
-                mkdir -p "''$${outputName}/bin"
+                mkdir -p "''$${outputName}/"
+                cp -rs ${pkg.${outputName}}/* "''$${outputName}/"
+                chmod -R 777 "''$${outputName}/bin/"
+                rm -rf "''$${outputName}/bin/"
+                mkdir -p "''$${outputName}/bin/"
                 for file in ${pkg.${outputName}}/bin/* ; do
                   if [ -f "$file" ]; then
                     echo "#!${nixpkgs.bash}/bin/bash" > "''$${outputName}/bin/$(basename $file)"
