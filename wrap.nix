@@ -4,7 +4,7 @@
     buildInputs = [ pkg ];
     nativeBuildInputs = [ pkg ];
     buildCommand = ''
-      set -eo pipefail
+      set -o pipefail
       ${
         nixpkgs.lib.concatStringsSep "\n"
           (map
