@@ -4,7 +4,7 @@
     buildInputs = [ pkg ];
     nativeBuildInputs = [ pkg ];
     buildCommand = ''
-      set -o pipefail
+      set -eo pipefail
       ${
         nixpkgs.lib.concatStringsSep "\n"
           (map
@@ -14,8 +14,10 @@
                 set -x
                 mkdir -p "''$${outputName}/"
                 cp -rs ${pkg.${outputName}}/* "''$${outputName}/"
-                chmod -R 777 "''$${outputName}/bin/"
-                rm -rf "''$${outputName}/bin/"
+                if [ -d "''$${outputName}/bin/" ]; then
+                  chmod -R 777 "''$${outputName}/bin/"
+                  rm -rf "''$${outputName}/bin/"
+                fi
                 mkdir -p "''$${outputName}/bin/"
                 for file in ${pkg.${outputName}}/bin/* ; do
                   if [ -f "$file" ]; then
