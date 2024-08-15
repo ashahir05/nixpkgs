@@ -2,14 +2,32 @@ name: update-flake-lock
 on:
   workflow_dispatch: # allows manual triggering
   schedule:
-    - cron: "0 0 * * *" # runs weekly on Sunday at 00:00
-
+    - cron: "0 0 * * *" # runs daily at 00:00
 jobs:
-  lockfile:
+  lockfile-unfree:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          ref: unfree
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - name: Update flake.lock
+        run: |
+          git config --global user.name "Auto updater"
+          git config --global user.email "autoupdater-github@ashahir05"
+          nix flake update
+          git commit -a -m "Autoupdate"
+          git push
+
+  lockfile-unfree-gl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: unfree+gl
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
       - name: Update flake.lock
