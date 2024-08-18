@@ -13,6 +13,7 @@
                 echo "Building output ${outputName}"
                 set -x
                 mkdir -p "''$${outputName}/"
+                mkdir -p "''$${outputName}/unwrapped/"
                 cp -rs ${pkg.${outputName}}/* "''$${outputName}/"
                 if [ -d "''$${outputName}/bin/" ]; then
                   chmod -R 777 "''$${outputName}/bin/"
@@ -27,7 +28,7 @@
                     echo "export VK_DRIVER_FILES="${nixpkgs.mesa.drivers}/share/vulkan/icd.d:$VK_DRIVER_FILES"" >> "''$${outputName}/bin/$(basename $file)"
                     echo "exec $file "\"\$@\""" >> "''$${outputName}/bin/$(basename $file)"
                     chmod +x "''$${outputName}/bin/$(basename $file)"
-                    cp -s $file "''$${outputName}/bin/$(basename $file).raw"
+                    cp -s $file "''$${outputName}/unwrapped/$(basename $file).raw"
                   fi
                 done
                 set +x
