@@ -1,8 +1,8 @@
 {
-  description = "nixpkgs+unfree";
+  description = "nixpkgs+unfree+gl";
 
   inputs = {  
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:ashahir05/nixpkgs/unfree";
   };
 
   outputs = { self, nixpkgs, ... }:
@@ -10,16 +10,16 @@
       systems = lib.systems.flakeExposed;
       lib = nixpkgs.lib;
       eachSystem = lib.genAttrs systems;
+      local = eachSystem (system: rec {
+        pkgs = nixpkgs.legacyPackages."${system}";
+        recurse = lib.mapAttrs (key: val: if (val ? type && val.type == "derivation") then (wrap val) else (if (val ? type && val.type == "set") then (recurse val) else val));
+        wrap = import ./wrap.nix { nixpkgs = pkgs; };
+      });
     in
     {
       inherit (nixpkgs) lib nixosModules htmlDocs;
       legacyPackages = eachSystem (system:
-        let 
-          patchedPkgs = import nixpkgs { config.allowUnfree = true; config.allowUnsupportedSystem = true; inherit system; };
-          wrap = import ./wrap.nix { nixpkgs = patchedPkgs; system = system; };
-          recurse = lib.mapAttrs (key: val: if (val ? type && val.type == "derivation") then (wrap val) else (if (val ? type && val.type == "set") then (recurse val) else val));
-        in
-          recurse patchedPkgs
-      );  
+        local."${system}".recurse local."${system}".pkgs
+      );
     };
 }

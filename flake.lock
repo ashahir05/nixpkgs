@@ -1,6 +1,25 @@
 {
   "nodes": {
     "nixpkgs": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1723941203,
+        "narHash": "sha256-+dTKG7g1VAbpzcBvlelmD6wv0ubIfxAxWYR0KF8c3EE=",
+        "owner": "ashahir05",
+        "repo": "nixpkgs",
+        "rev": "3f6bc79e24300866b351cab649469ab5d09e57a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ashahir05",
+        "ref": "unfree",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1723856861,
         "narHash": "sha256-OTDg91+Zzs2SpU3csK4xVdSQFoG8cK1lNUwKmTqERyE=",
