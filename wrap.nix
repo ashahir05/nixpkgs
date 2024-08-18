@@ -1,6 +1,6 @@
 { nixpkgs }: (pkg:
   nixpkgs.stdenv.mkDerivation {
-    inherit (pkg) name version meta passthru;
+    inherit (pkg) name version meta outputs passthru;
     buildInputs = [ pkg ];
     nativeBuildInputs = [ pkg ];
     buildCommand = ''
@@ -33,7 +33,7 @@
                 set +x
               ''
             )
-            (if pkg ? outputs then pkg.outputs else [ "out" ])
+            (pkg.outputs)
           )
       }
     '';
