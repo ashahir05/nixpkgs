@@ -12,7 +12,7 @@
       eachSystem = lib.genAttrs systems;
       local = eachSystem (system: rec {
         pkgs = nixpkgs.legacyPackages."${system}";
-        recurse = lib.mapAttrs (key: val: if (val ? type && val.type == "derivation") then (wrap val) else (if (val ? type && val.type == "set") then (recurse val) else val));
+        recurse = lib.mapAttrs (key: val: if (val ? type && val.type == "derivation" && val ? name && val ? outputs && val ? meta && val ? passthru) then (wrap val) else (if (val ? type && val.type == "set") then (recurse val) else val));
         wrap = import ./wrap.nix { nixpkgs = pkgs; };
       });
     in
