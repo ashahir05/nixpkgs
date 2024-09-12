@@ -1,9 +1,9 @@
 { nixpkgs }: (pkg:
   nixpkgs.stdenv.mkDerivation {
     inherit (pkg) name outputs;
-    version = if pkg.version ? type then pkg.version else null;
-    meta = if pkg.meta ? type then pkg.meta else null;
-    passthru = if pkg.passthru ? type then pkg.passthru else null;
+    version = if pkg.version ? type then pkg.version else "";
+    meta = if pkg.meta ? type then pkg.meta else {};
+    passthru = if pkg.passthru ? type then pkg.passthru else {};
     buildInputs = [ pkg ];
     nativeBuildInputs = [ pkg ];
     buildCommand = ''
