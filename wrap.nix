@@ -3,7 +3,7 @@
     inherit (pkg) name outputs;
     version = if pkg ? version then pkg.version else "";
     meta = if pkg ? meta then pkg.meta else {};
-    passthru = if pkg passthru then pkg.passthru else {};
+    passthru = if pkg ? passthru then pkg.passthru else {};
     buildInputs = [ pkg ];
     nativeBuildInputs = [ pkg ];
     buildCommand = ''
