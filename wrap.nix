@@ -26,8 +26,8 @@
                 for file in ${pkg.${outputName}}/bin/* ; do
                   if [ -f "$file" ]; then
                     echo "#!${nixpkgs.bash}/bin/bash" > "''$${outputName}/bin/$(basename $file)"
-                    echo "export LD_LIBRARY_PATH="${nixpkgs.mesa.drivers}/lib:$LD_LIBRARY_PATH"" >> "''$${outputName}/bin/$(basename $file)"
-                    echo "export LIBGL_DRIVERS_PATH="${nixpkgs.mesa.drivers}/lib/dri:$LIBGL_DRIVERS_PATH"" >> "''$${outputName}/bin/$(basename $file)"
+                    echo "export LD_LIBRARY_PATH="${nixpkgs.mesa.drivers}/lib:\$LD_LIBRARY_PATH"" >> "''$${outputName}/bin/$(basename $file)"
+                    echo "export LIBGL_DRIVERS_PATH="${nixpkgs.mesa.drivers}/lib/dri:\$LIBGL_DRIVERS_PATH"" >> "''$${outputName}/bin/$(basename $file)"
                     echo "export VK_DRIVER_FILES="${nixpkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json"" >> "''$${outputName}/bin/$(basename $file)"
                     echo "exec $file "\"\$@\""" >> "''$${outputName}/bin/$(basename $file)"
                     chmod +x "''$${outputName}/bin/$(basename $file)"
